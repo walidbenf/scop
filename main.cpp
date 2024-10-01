@@ -36,7 +36,7 @@ int main() {
         return -1;
     }
 
-    // Configurer les shaders
+    // Configure les shaders
     GLuint shaderProgram;
     try {
         shaderProgram = create_shader_program("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
@@ -46,6 +46,9 @@ int main() {
         glfwTerminate();
         return -1;
     }
+
+    // Initialise les buffers
+    init_buffers(obj);
 
     // Boucle principale
     while (!glfwWindowShouldClose(window)) {

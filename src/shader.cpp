@@ -4,12 +4,7 @@
 #include <stdexcept>
 
 GLuint create_shader_program(const std::string &vertexPath, const std::string &fragmentPath) {
-   
-	// Créer les shaders
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // Lire le code source des shaders
+    // Lire le code des shaders
     std::ifstream vertexFile(vertexPath);
     std::ifstream fragmentFile(fragmentPath);
 
@@ -27,11 +22,12 @@ GLuint create_shader_program(const std::string &vertexPath, const std::string &f
     const char *vertexSource = vertexCode.c_str();
     const char *fragmentSource = fragmentCode.c_str();
 
-    // Compiler le vertex shader
+    // Compile le vertex shader
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexSource, NULL);
     glCompileShader(vertexShader);
 
-    // Vérifier les erreurs de compilation
+    // Vérifie les erreurs de compilation
     GLint success;
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -40,11 +36,12 @@ GLuint create_shader_program(const std::string &vertexPath, const std::string &f
         throw std::runtime_error("Erreur de compilation du vertex shader: " + std::string(infoLog));
     }
 
-    // Compiler le fragment shader
+    // Compile le fragment shader
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
     glCompileShader(fragmentShader);
 
-    // Vérifier les erreurs de compilation
+    // Vérifie les erreurs de compilation
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         char infoLog[512];
@@ -52,13 +49,13 @@ GLuint create_shader_program(const std::string &vertexPath, const std::string &f
         throw std::runtime_error("Erreur de compilation du fragment shader: " + std::string(infoLog));
     }
 
-    // Lier les shaders dans mon programme
+    // Lier les shaders dans un programme
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
-    // Vérifier les erreurs de liaison
+    // Vérifie les erreurs de liaison
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         char infoLog[512];
